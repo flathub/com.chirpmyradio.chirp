@@ -36,7 +36,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/kk7ds/chirp.git
-        commit: 68546632f7dd949a8861c3cc3358de9747a70ef2
+        commit: a89815c5c1575d7ab2c4bfae2ce153611f64e804
 
       - type: patch
         path: patches/version-number-injector.patch
@@ -46,9 +46,6 @@ modules:
 
       - type: patch
         path: patches/add-chirp-wrapper.patch
-
-      - type: patch
-        path: patches/add-dev-field-to-metainfo.tmp.patch
 
     modules:
       - chirp-deps.json
