@@ -78,9 +78,9 @@ make-bump-commit:
 
 # Runs `build`,`lint`, `run` tasks in that order
 [group("Bootstrappers")]
-testapp: build lint run
+testapp: lint _ask_if_ok build run
 
 
-# Runs `pull-changes`, `lint`,`testapp`, `make-bump-commit` tasks in that order with user confirmation prompts between major steps
+# Runs `pull-changes`, `bump-version`, `lint`, `testapp`, `make-bump-commit` tasks in that order with user confirmation prompts between major steps
 [group("Bootstrappers")]
-all: pull-changes lint _ask_if_ok testapp _ask_if_ok make-bump-commit
+all: pull-changes bump-version testapp _ask_if_ok make-bump-commit
