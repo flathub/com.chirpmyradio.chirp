@@ -1,15 +1,15 @@
-From e047dc8e3b31c61a9ebf04b2bb6a2359dc62f5e9 Mon Sep 17 00:00:00 2001
+From 11a0b9670c14c7cd4f2d1ff222902fe09d21d6d5 Mon Sep 17 00:00:00 2001
 From: PolyCat <contact.polycat@proton.me>
-Date: Mon, 8 Jun 2026 15:17:54 +0300
+Date: Sun, 21 Jun 2026 16:30:53 +0300
 Subject: [PATCH] version-number-injector
 
 ---
- chirp/__init__.py                           | 2 +-
- flathub/com.chirpmyradio.chirp.metainfo.xml | 9 +++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ chirp/__init__.py                           |  2 +-
+ flathub/com.chirpmyradio.chirp.metainfo.xml | 10 ++++++++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/chirp/__init__.py b/chirp/__init__.py
-index 3f25801d..2e49f534 100644
+index 3f25801d..2153b547 100644
 --- a/chirp/__init__.py
 +++ b/chirp/__init__.py
 @@ -13,4 +13,4 @@
@@ -17,16 +17,17 @@ index 3f25801d..2e49f534 100644
  # along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 -CHIRP_VERSION = "py3dev"
-+CHIRP_VERSION = "next-20260605"
++CHIRP_VERSION = "next-20260619"
 diff --git a/flathub/com.chirpmyradio.chirp.metainfo.xml b/flathub/com.chirpmyradio.chirp.metainfo.xml
-index 1ec7a3dd..1d41145f 100644
+index 1ec7a3dd..a3a60442 100644
 --- a/flathub/com.chirpmyradio.chirp.metainfo.xml
 +++ b/flathub/com.chirpmyradio.chirp.metainfo.xml
-@@ -32,6 +32,15 @@
+@@ -32,6 +32,16 @@
      </screenshot>
    </screenshots>
  
 +  <releases>
++    <release version="next-20260619" date="2026-06-19"></release>
 +    <release version="next-20260605" date="2026-06-05"></release>
 +    <release version="next-20260529" date="2026-05-29"></release>
 +    <release version="next-20260522" date="2026-05-22"></release>
