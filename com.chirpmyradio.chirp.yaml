@@ -36,7 +36,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/kk7ds/chirp.git
-        commit: b7ae1b65f950f2a689f3c8a609064d487eee5345
+        commit: 5b1bba66360bdb56153cba281b34ecc0ca0aedd3
 
       - type: patch
         path: patches/version-number-injector.patch
