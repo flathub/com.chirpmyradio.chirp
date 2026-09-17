@@ -26,12 +26,17 @@ modules:
   - name: chirp
     buildsystem: simple
     build-commands:
+      - cd ./chirp/locale && make
       - python3 setup.py install --prefix=${FLATPAK_DEST}
+      - mkdir -p "${FLATPAK_DEST}/share" "${FLATPAK_DEST}/etc/fonts"
+      - mv "$(python3 -m pip show chirp | awk '/Location:/ {print $2}')"/chirp/locale/ "${FLATPAK_DEST}/share/locale/"
+      - ln -s "${FLATPAK_DEST}/share/locale" "$(python3 -m pip show chirp | awk '/Location:/ {print $2}')/chirp/locale"
 
       - install -Dm644 flathub/com.chirpmyradio.chirp.metainfo.xml ${FLATPAK_DEST}/share/metainfo/com.chirpmyradio.chirp.metainfo.xml
       - install -Dm644 flathub/com.chirpmyradio.chirp.png ${FLATPAK_DEST}/share/icons/hicolor/512x512/apps/com.chirpmyradio.chirp.png
       - install -Dm644 flathub/com.chirpmyradio.chirp.desktop ${FLATPAK_DEST}/share/applications/com.chirpmyradio.chirp.desktop
-      - install -Dm755 flathub/chirp-wrapper.sh ${FLATPAK_DEST}/bin/chirp-wrapper.sh
+      - install -Dm755 flathub/fonts.conf ${FLATPAK_DEST}/etc/fonts/fonts.conf
+      - install -Dm755 flathub/wrapper.sh ${FLATPAK_DEST}/bin/chirp-wrapper.sh
 
     sources:
       - type: git
@@ -45,7 +50,10 @@ modules:
         path: patches/config-dir.patch
 
       - type: patch
-        path: patches/add-chirp-wrapper.patch
+        path: patches/fontconfig.patch
+
+      - type: patch
+        path: patches/wrapper.patch
 
     modules:
       - chirp-deps.json

@@ -1,0 +1,21 @@
+From 4a955e238efc0b6a8a522fe22bbf045c1f311368 Mon Sep 17 00:00:00 2001
+From: PolyCat <contact.polycat@proton.me>
+Date: Thu, 17 Sep 2026 11:52:52 +0300
+Subject: [PATCH] wrapper
+
+---
+ flathub/wrapper.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 flathub/wrapper.sh
+
+diff --git a/flathub/wrapper.sh b/flathub/wrapper.sh
+new file mode 100644
+index 00000000..03a3ef94
+--- /dev/null
++++ b/flathub/wrapper.sh
+@@ -0,0 +1,2 @@
++#!/usr/bin/env sh
++FONTCONFIG_FILE=/app/etc/fonts/fonts.conf chirp --no-install-desktop-app --config-dir "$XDG_CONFIG_HOME"
+-- 
+2.55.0
+
