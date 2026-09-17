@@ -1,0 +1,33 @@
+From d715c134188a7f024d1bed37792ccf44d1f0c024 Mon Sep 17 00:00:00 2001
+From: PolyCat <contact.polycat@proton.me>
+Date: Thu, 17 Sep 2026 11:48:27 +0300
+Subject: [PATCH] fontconfig
+
+---
+ flathub/fonts.conf | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+ create mode 100644 flathub/fonts.conf
+
+diff --git a/flathub/fonts.conf b/flathub/fonts.conf
+new file mode 100644
+index 00000000..14160d09
+--- /dev/null
++++ b/flathub/fonts.conf
+@@ -0,0 +1,14 @@
++<?xml version="1.0"?>
++<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
++<fontconfig>
++    <include>/etc/fonts/fonts.conf</include>
++
++    <dir>/run/host/fonts</dir>
++    <dir>/run/host/local-fonts</dir>
++    <dir>/run/host/user-fonts</dir>
++
++    <cachedir>/run/host/fonts-cache</cachedir>
++    <cachedir>/run/host/user-fonts-cache</cachedir>
++
++    <include>/run/host/font-dirs.xml</include>
++</fontconfig>
+-- 
+2.55.0
+
