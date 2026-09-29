@@ -20,7 +20,6 @@ finish-args:
   - --device=all
   - --socket=x11
   - --share=ipc
-  - --filesystem=home
 
 modules:
   - name: chirp
