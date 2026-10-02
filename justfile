@@ -74,7 +74,7 @@ make-bump-commit:
     git commit -e -m "Bumped app version to "
 
 
-# == Tootstrappers ==
+# == Toolstrappers ==
 
 # Runs `build`,`lint`, `run` tasks in that order
 [group("Bootstrappers")]
