@@ -20,7 +20,6 @@ build: (_colorprint "Building app")
 # Lints manifest
 [group("Tasks")]
 lint: (_colorprint "Running linter on manifest")
-    @echo -e "\e[33mINFO: \e[34mError \e[36m\`finish-args-home-filesystem-access\`\e[34m is expected and should be ignored\e[0m\n"
     flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest com.chirpmyradio.chirp.yaml || true
 
 # Runs the currently installed app
@@ -74,7 +73,7 @@ make-bump-commit:
     git commit -e -m "Bumped app version to "
 
 
-# == Tootstrappers ==
+# == Toolstrappers ==
 
 # Runs `build`,`lint`, `run` tasks in that order
 [group("Bootstrappers")]
