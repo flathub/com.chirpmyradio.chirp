@@ -13,7 +13,6 @@ cleanup:
   - /lib/pygtk
   - /share/doc
   - /share/gtk-doc
-  - /bin/wxdocs
 
 finish-args:
   - --share=network
@@ -26,9 +25,9 @@ modules:
     buildsystem: simple
     build-commands:
       - cd ./chirp/locale && make
-      - python3 setup.py install --prefix=${FLATPAK_DEST}
-      - mkdir -p "${FLATPAK_DEST}/share" "${FLATPAK_DEST}/etc/fonts"
-      - mv "$(python3 -m pip show chirp | awk '/Location:/ {print $2}')"/chirp/locale/ "${FLATPAK_DEST}/share/locale/"
+      - pip3 install . --prefix=${FLATPAK_DEST} --no-build-isolation
+      - mkdir -p "${FLATPAK_DEST}/share/locale" "${FLATPAK_DEST}/etc/fonts"
+      - mv "$(python3 -m pip show chirp | awk '/Location:/ {print $2}')"/chirp/locale "${FLATPAK_DEST}/share/locale/"
       - ln -s "${FLATPAK_DEST}/share/locale" "$(python3 -m pip show chirp | awk '/Location:/ {print $2}')/chirp/locale"
 
       - install -Dm644 flathub/com.chirpmyradio.chirp.metainfo.xml ${FLATPAK_DEST}/share/metainfo/com.chirpmyradio.chirp.metainfo.xml
@@ -40,7 +39,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/kk7ds/chirp.git
-        commit: 0bfb2b50e33dcaab59c380238f34e053d95dfd50
+        commit: 0a9e92cb21d121bf7caa137592d1885e4969871e
 
       - type: patch
         path: patches/version-number-injector.patch
