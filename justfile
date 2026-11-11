@@ -1,85 +1,97 @@
 
+set script-interpreter := ["bash", "-euo", "pipefail"]
+
+appname := "com.chirpmyradio.chirp"
+manifest := f"{{appname}}.yaml"
+
 # == Helpers ==
 
-_help:
-    @just --list
+@_help:
+    just --list
 
-_colorprint text:
-    @echo -e "\e[32m== {{text}} ==\e[0m"
+@_log text:
+    echo -e "\e[32m=== {{text}} ===\e[0m"
 
-_ask_if_ok:
-    @read -p "All good? [y/N] " response && [ "$response" = "y" ] || { echo "Aborting."; exit 1; }
+@_ask_if_ok:
+    read -p "All good? [y/N] " response && [ "$response" = "y" ] || { echo "Aborting."; exit 1; }
+
 
 #== Tasks ==
 
 # Builds and installs the app
 [group("Tasks")]
-build: (_colorprint "Building app")
-    flatpak run org.flatpak.Builder build --install --user --force-clean com.chirpmyradio.chirp.yaml
+build: (_log "Building app")
+    flatpak run org.flatpak.Builder build --install --user --force-clean {{manifest}}
 
 # Lints manifest
 [group("Tasks")]
-lint: (_colorprint "Running linter on manifest")
-    flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest com.chirpmyradio.chirp.yaml || true
+lint: (_log "Running linter on manifest")
+    -flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest {{manifest}}
 
 # Runs the currently installed app
 [group("Tasks")]
-run: (_colorprint "Running currently installed app")
-    flatpak run com.chirpmyradio.chirp
+run: (_log "Running currently installed app")
+    flatpak run {{appname}}
 
 
 # == Scripts ==
 
 patch_name := "version-number-injector"
 
-# Pulls new changes on `master` and then branches off on branch `bump-version`
+# Pulls new changes on `master` and then branches off on branch `BRANCH` passed in, thus updating that branch
 [group("Scripts")]
-pull-changes: (_colorprint "Pulling in new changes")
+update-branch BRANCH: (_log "Pulling in new changes")
     git checkout master
     git pull
-    git branch -D bump-version
-    git checkout -b bump-version
+    -git branch -D {{BRANCH}}
+    git checkout -b {{BRANCH}}
 
 # Script to semi-automatically generate a new `patches/version-number-injector.patch`
 [group("Scripts")]
-bump-version: (_colorprint "Starting patch generation script")
-    #!/usr/bin/env bash
-    set -euo pipefail
-
-    xdg-open https://github.com/kk7ds/chirp/commits/build-queue
-    $EDITOR ./com.chirpmyradio.chirp.yaml
+[script]
+bump-version _save-version-var="false": (_log "Starting patch generation script")
+    xdg-open https://archive.chirpmyradio.com/download?stream=next >/dev/null 2>&1 &
+    xdg-open https://github.com/kk7ds/chirp/commits/ >/dev/null 2>&1 &
+    read -rp "New chommit hash: " new_hash
+    sed -i -E "s/(commit: )[0-9a-f]{40}/\1${new_hash}/" {{manifest}} \
 
     project_dir="$PWD"
 
     rm -rf /tmp/chirp
-    git clone git@github.com:kk7ds/chirp.git -b build-queue /tmp/chirp
+    git clone --depth=1 git@github.com:kk7ds/chirp.git /tmp/chirp
     cd /tmp/chirp
 
     git apply "$project_dir/patches/{{patch_name}}.patch"
-    xdg-open https://archive.chirpmyradio.com/download?stream=next
-    $EDITOR chirp/__init__.py
-    $EDITOR flathub/com.chirpmyradio.chirp.metainfo.xml
 
-    git add . && git commit -m "{{patch_name}}"
-    git format-patch -1 --stdout > "$project_dir/patches/{{patch_name}}.patch"
+    read -rp "New app version number: " new_version
+    sed -i -E "s/(CHIRP_VERSION = \")[^\"]+/\1${new_version}/" chirp/__init__.py
+
+
+    date="${new_version#next-}"
+    release_date="${date:0:4}-${date:4:2}-${date:6:2}"
+
+    sed -i "/<releases>/a\\
+        <release version=\"$new_version\" date=\"$release_date\"></release>" \
+        flathub/com.chirpmyradio.chirp.metainfo.xml
+
+    git diff > "$project_dir/patches/{{patch_name}}.patch"
+
+    if [ "{{_save-version-var}}" = "true" ]; then
+        mkdir -p $project_dir/build
+        echo $release_date > $project_dir/build/var_buffer
+    fi
 
     rm -rf /tmp/chirp
 
 
-# Prepares a commit containing only the files needed to bump the version of the app
-[group("Scripts")]
-make-bump-commit: 
-    git add com.chirpmyradio.chirp.yaml patches/{{patch_name}}.patch
-    git commit -e -m "Bumped app version to "
+# == Workflows ==
 
-
-# == Toolstrappers ==
-
-# Runs `build`,`lint`, `run` tasks in that order
-[group("Bootstrappers")]
-testapp: lint _ask_if_ok build run
-
-
-# Runs `pull-changes`, `bump-version`, `lint`, `testapp`, `make-bump-commit` tasks in that order with user confirmation prompts between major steps
-[group("Bootstrappers")]
-all: pull-changes bump-version testapp _ask_if_ok make-bump-commit
+# Semi-automatically creates new app version commit
+[group("Workflows")]
+update-app BRANCH: (update-branch BRANCH) (bump-version "true") lint _ask_if_ok build run _ask_if_ok
+    git diff -- {{manifest}}
+    git diff -- patches/{{patch_name}}.patch
+    just _ask_if_ok
+    git add {{manifest}} patches/{{patch_name}}.patch
+    git commit -e -m "Bumped app version to $(cat build/var_buffer)"
+    rm -f build/var_buffer
