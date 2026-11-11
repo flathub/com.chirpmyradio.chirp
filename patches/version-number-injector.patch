@@ -1,15 +1,5 @@
-From 483d8f25be8d68d765a187efeff63b789235745d Mon Sep 17 00:00:00 2001
-From: PolyCat <contact.polycat@proton.me>
-Date: Sat, 24 Oct 2026 23:35:30 +0300
-Subject: [PATCH] version-number-injector
-
----
- chirp/__init__.py                           |  2 +-
- flathub/com.chirpmyradio.chirp.metainfo.xml | 23 +++++++++++++++++++++
- 2 files changed, 24 insertions(+), 1 deletion(-)
-
 diff --git a/chirp/__init__.py b/chirp/__init__.py
-index 3f25801d..61d369e7 100644
+index 3f25801..84114f8 100644
 --- a/chirp/__init__.py
 +++ b/chirp/__init__.py
 @@ -13,4 +13,4 @@
@@ -17,16 +7,17 @@ index 3f25801d..61d369e7 100644
  # along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 -CHIRP_VERSION = "py3dev"
-+CHIRP_VERSION = "next-20261023"
++CHIRP_VERSION = "next-20261106"
 diff --git a/flathub/com.chirpmyradio.chirp.metainfo.xml b/flathub/com.chirpmyradio.chirp.metainfo.xml
-index 1ec7a3dd..bfa8e1f2 100644
+index 1ec7a3d..421755e 100644
 --- a/flathub/com.chirpmyradio.chirp.metainfo.xml
 +++ b/flathub/com.chirpmyradio.chirp.metainfo.xml
-@@ -32,6 +32,29 @@
+@@ -32,6 +32,30 @@
      </screenshot>
    </screenshots>
  
 +  <releases>
++    <release version="next-20261106" date="2026-11-06"></release>
 +    <release version="next-20261023" date="2026-10-23"></release>
 +    <release version="next-20261016" date="2026-10-16"></release>
 +    <release version="next-20261009" date="2026-10-09"></release>
@@ -52,6 +43,3 @@ index 1ec7a3dd..bfa8e1f2 100644
    <categories>
      <category>Network</category>
      <category>HamRadio</category>
--- 
-2.56.0
-
