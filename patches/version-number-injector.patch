@@ -1,5 +1,5 @@
 diff --git a/chirp/__init__.py b/chirp/__init__.py
-index 3f25801..84114f8 100644
+index 3f25801..ba95865 100644
 --- a/chirp/__init__.py
 +++ b/chirp/__init__.py
 @@ -13,4 +13,4 @@
@@ -7,16 +7,17 @@ index 3f25801..84114f8 100644
  # along with this program.  If not, see <http://www.gnu.org/licenses/>.
  
 -CHIRP_VERSION = "py3dev"
-+CHIRP_VERSION = "next-20261106"
++CHIRP_VERSION = "next-20261113"
 diff --git a/flathub/com.chirpmyradio.chirp.metainfo.xml b/flathub/com.chirpmyradio.chirp.metainfo.xml
-index 1ec7a3d..421755e 100644
+index 1ec7a3d..c9a5f1a 100644
 --- a/flathub/com.chirpmyradio.chirp.metainfo.xml
 +++ b/flathub/com.chirpmyradio.chirp.metainfo.xml
-@@ -32,6 +32,30 @@
+@@ -32,6 +32,31 @@
      </screenshot>
    </screenshots>
  
 +  <releases>
++    <release version="next-20261113" date="2026-11-13"></release>
 +    <release version="next-20261106" date="2026-11-06"></release>
 +    <release version="next-20261023" date="2026-10-23"></release>
 +    <release version="next-20261016" date="2026-10-16"></release>
