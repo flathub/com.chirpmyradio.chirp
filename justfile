@@ -49,7 +49,7 @@ update-branch BRANCH: (_log "Pulling in new changes")
 # Script to semi-automatically generate a new `patches/version-number-injector.patch`
 [group("Scripts")]
 [script]
-bump-version _save-version-var="false": (_log "Starting patch generation script")
+bump-version: (_log "Starting patch generation script")
     xdg-open https://archive.chirpmyradio.com/download?stream=next >/dev/null 2>&1 &
     xdg-open https://github.com/kk7ds/chirp/commits/ >/dev/null 2>&1 &
     read -rp "New chommit hash: " new_hash
@@ -76,22 +76,17 @@ bump-version _save-version-var="false": (_log "Starting patch generation script"
 
     git diff > "$project_dir/patches/{{patch_name}}.patch"
 
-    if [ "{{_save-version-var}}" = "true" ]; then
-        mkdir -p $project_dir/build
-        echo $release_date > $project_dir/build/var_buffer
-    fi
-
     rm -rf /tmp/chirp
 
 
 # == Workflows ==
 
-# Semi-automatically creates new app version commit
+# Semi-automatically creates new app version commit (`BRANCH` is on what branch this should take place on)
 [group("Workflows")]
-update-app BRANCH: (update-branch BRANCH) (bump-version "true") lint _ask_if_ok build run _ask_if_ok
+update-app BRANCH: (update-branch BRANCH) bump-version lint _ask_if_ok build run _ask_if_ok
+    just _log "Showing commit diff"
     git diff -- {{manifest}}
     git diff -- patches/{{patch_name}}.patch
     just _ask_if_ok
     git add {{manifest}} patches/{{patch_name}}.patch
-    git commit -e -m "Bumped app version to $(cat build/var_buffer)"
-    rm -f build/var_buffer
+    git commit -e -m "Bumped app version to "
