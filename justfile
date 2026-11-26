@@ -58,7 +58,7 @@ bump-version: (_log "Starting patch generation script")
     project_dir="$PWD"
 
     rm -rf /tmp/chirp
-    git clone --depth=1 git@github.com:kk7ds/chirp.git /tmp/chirp
+    git clone --revision=$new_hash --depth=1 git@github.com:kk7ds/chirp.git /tmp/chirp
     cd /tmp/chirp
 
     git apply "$project_dir/patches/{{patch_name}}.patch"
