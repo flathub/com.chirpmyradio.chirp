@@ -37,6 +37,7 @@ run: (_log "Running currently installed app")
 # == Scripts ==
 
 patch_name := "version-number-injector"
+app_version_buffer := "/tmp/chirp-app-version-buffer"
 
 # Pulls new changes on `master` and then branches off on branch `BRANCH` passed in, thus updating that branch
 [group("Scripts")]
@@ -65,6 +66,7 @@ bump-version: (_log "Starting patch generation script")
 
     read -rp "New app version number: " new_version
     sed -i -E "s/(CHIRP_VERSION = \")[^\"]+/\1${new_version}/" chirp/__init__.py
+    echo $new_version > {{app_version_buffer}}
 
 
     date="${new_version#next-}"
@@ -89,4 +91,4 @@ update-app BRANCH: (update-branch BRANCH) bump-version lint _ask_if_ok build run
     git diff -- patches/{{patch_name}}.patch
     just _ask_if_ok
     git add {{manifest}} patches/{{patch_name}}.patch
-    git commit -e -m "Bumped app version to "
+    git commit -m "Bumped app version to $(cat {{app_version_buffer}})"
